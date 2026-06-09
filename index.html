@@ -200,7 +200,7 @@ let dateFilterEnd   = null;
 
 // ── TSV PARSER ───────────────────────────────────────────────────────
 // TSV(탭 구분)로 받아 한글/특수문자 깨짐 방지
-// Sheet columns: 날짜 | Brand | Product | Platform | Campaign | Total Spent | Budget
+// Sheet columns: Date | Brand | Product | Platform | Campaign | Total Spent | Budget
 // Budget은 날짜마다 동일값 반복 → grouping 시 첫 번째 값만 사용
 function parseCSV(text) {
   const rows = text.trim().split("\n").map(l => {
@@ -218,7 +218,7 @@ function parseCSV(text) {
   const hdr = rows[0].map(h => h.toLowerCase().trim());
   const gi  = k => hdr.findIndex(h => h.includes(k));
 
-  const iD  = gi("날짜") >= 0 ? gi("날짜") : gi("date");
+  const iD  = gi("date");
   const iB  = gi("brand");
   const iPr = gi("product");
   const iP  = gi("platform");
@@ -231,7 +231,7 @@ function parseCSV(text) {
     .filter(r => r.length > 4 && r[iB] && r[iC] && r[iP])
     .filter(r => !r[iB].toLowerCase().includes("grand") && !r[iB].toLowerCase().includes("total"))
     .map(r => ({
-      date:     iD >= 0 ? r[iD].trim() : "",
+      date:     r[iD].trim() : "",
       brand:    r[iB].trim(),
       product:  (iPr >= 0 ? r[iPr] : "").trim(),
       platform: r[iP].trim(),
